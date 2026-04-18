@@ -11,6 +11,10 @@ consumers:
   - username: service_role
     keyauth_credentials:
       - key: $SUPABASE_SERVICE_KEY
+  - username: admin
+    basicauth_credentials:
+      - username: $DASHBOARD_USERNAME
+        password: $DASHBOARD_PASSWORD
 
 ###
 ### Access Control List
@@ -19,6 +23,8 @@ acls:
   - consumer: anon
     group: anon
   - consumer: service_role
+    group: admin
+  - consumer: admin
     group: admin
 
 ###
@@ -227,3 +233,11 @@ services:
           - /
     plugins:
       - name: cors
+      - name: basic-auth
+        config:
+          hide_credentials: true
+      - name: acl
+        config:
+          hide_groups_header: true
+          allow:
+            - admin
